@@ -61,7 +61,8 @@ public class RueGamePlugin : IGamePlugin
         await commandManager.Insert(new StatCommand());
         await commandManager.Insert(new TemporaryStatCommand());
         await commandManager.Insert(new ClearDropsCommand());
-        
+        await commandManager.Insert(new RateCommand(ctx.Managers.Rates));
+
         await commandManager.Insert(new PluginCommand(host.Manager));
         await commandManager.Insert(new DebugCommand());
 
