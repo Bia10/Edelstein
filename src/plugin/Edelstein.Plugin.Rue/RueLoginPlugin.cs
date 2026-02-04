@@ -9,10 +9,13 @@ using Microsoft.Extensions.Logging;
 
 namespace Edelstein.Plugin.Rue;
 
+/// <summary>
+/// Login server plugin providing auto-registration, auto-login, and auto-character features.
+/// </summary>
 public class RueLoginPlugin : ILoginPlugin
 {
     public string ID => "RueLogin";
-    
+
     private ILogger? Logger { get; set; }
     private RueConfigLogin? Config { get; set; }
 
@@ -42,6 +45,22 @@ public class RueLoginPlugin : ILoginPlugin
             Config,
             ctx
         ));
+
+        // Auto-login: after successful password check, auto-select world
+        ctx.Pipelines.UserOnPacketCheckPassword.Add(PipelinePriority.PostNormal, new UserOnPacketCheckPasswordAutoSelectWorldPlug(
+            Logger,
+            Config,
+            ctx
+        ));
+
+        // Auto-login: after successful world selection, auto-select character and enter game
+        ctx.Pipelines.UserOnPacketSelectWorld.Add(PipelinePriority.PostNormal, new UserOnPacketSelectWorldAutoSelectCharacterPlug(
+            Logger,
+            Config,
+            ctx,
+            ctx.Repositories.Character
+        ));
+
         return Task.CompletedTask;
     }
 
