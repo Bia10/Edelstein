@@ -324,6 +324,11 @@ public class ProgramHost : IHostedService
                 _bootstraps.Add(bootstrap);
         }
 
+        _bootstraps.Add(new CleanupRegistryBootstrap(
+            programScope.Resolve<ILogger<CleanupRegistryBootstrap>>(),
+            programScope.Resolve<IDbContextFactory<ServerDbContext>>(),
+            _config
+        ));
         _bootstraps.Add(new InitDatabaseBootstrap(
             programScope.Resolve<ILogger<InitDatabaseBootstrap>>(),
             programScope.Resolve<IDbContextFactory<AuthDbContext>>(),
