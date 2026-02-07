@@ -1,4 +1,4 @@
-using Edelstein.Plugin.Rue.Commands;
+﻿using Edelstein.Plugin.Rue.Commands;
 using Edelstein.Plugin.Rue.Commands.Admin;
 using Edelstein.Plugin.Rue.Commands.Common;
 using Edelstein.Plugin.Rue.Configs;
@@ -7,8 +7,8 @@ using Edelstein.Protocol.Gameplay.Game.Contexts;
 using Edelstein.Protocol.Plugin;
 using Edelstein.Protocol.Plugin.Game;
 using Edelstein.Protocol.Utilities.Pipelines;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace Edelstein.Plugin.Rue;
 
@@ -19,17 +19,16 @@ public class RueGamePlugin : IGamePlugin
 {
     public string ID => "RueGame";
 
-    private RueConfigGame? Config { get; set; }
+    private IOptions<RueConfigGame> _options = Options.Create(new RueConfigGame());
 
     public Task OnInit(IPluginHost<GameContext> host, GameContext ctx)
     {
-        Config = new RueConfigGame();
         return Task.CompletedTask;
     }
 
     public async Task OnStart(IPluginHost<GameContext> host, GameContext ctx)
     {
-        host.Config.Bind(Config);
+        _options = RueConfigBinding.BindGameOptions(host.Config);
 
         var commandManager = new CommandManager();
 
@@ -39,7 +38,7 @@ public class RueGamePlugin : IGamePlugin
             PipelinePriority.High,
             new FieldOnPacketUserChatCommandPlug(commandManager));
 
-        _ = RunIndexingAsync(commandManager, host.Logger, Config);
+        _ = RunIndexingAsync(commandManager, host.Logger, _options);
     }
 
     public Task OnStop()
@@ -94,7 +93,7 @@ public class RueGamePlugin : IGamePlugin
         await commandManager.Insert(new DebugCommand());
     }
 
-    private static async Task RunIndexingAsync(CommandManager commandManager, ILogger logger, RueConfigGame? config)
+    private static async Task RunIndexingAsync(CommandManager commandManager, ILogger logger, IOptions<RueConfigGame> options)
     {
         try
         {
@@ -119,7 +118,7 @@ public class RueGamePlugin : IGamePlugin
                 string.Join(", ", indexedCommands.Select(static c => c.Name)));
 
             var totalStartTick = Environment.TickCount64;
-            var logTrieTelemetry = config?.LogTrieTelemetry ?? false;
+            var logTrieTelemetry = options.Value.LogTrieTelemetry;
 
             await Parallel.ForEachAsync(
                 indexedCommands,

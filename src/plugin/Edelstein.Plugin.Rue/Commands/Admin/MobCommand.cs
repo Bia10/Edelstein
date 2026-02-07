@@ -1,4 +1,4 @@
-using Edelstein.Protocol.Gameplay.Game.Objects.Mob.Templates;
+﻿using Edelstein.Protocol.Gameplay.Game.Objects.Mob.Templates;
 using Edelstein.Protocol.Gameplay.Game.Objects.User;
 using Edelstein.Protocol.Utilities.Templates;
 
@@ -7,16 +7,16 @@ namespace Edelstein.Plugin.Rue.Commands.Admin;
 public class MobCommand : AbstractTemplateCommand<IMobTemplate>
 {
     private readonly ITemplateManager<IMobStringTemplate> _strings;
-    
+
     public MobCommand(
-        ITemplateManager<IMobTemplate> templates, 
+        ITemplateManager<IMobTemplate> templates,
         ITemplateManager<IMobStringTemplate> strings
-    ) : base(templates) 
+    ) : base(templates)
         => _strings = strings;
 
     public override string Name => "Mob";
     public override string Description => "Searches a specified mob";
-    
+
     protected override async Task<IReadOnlyList<TemplateCommandIndex>> Indices()
     {
         var strings = await _strings.RetrieveAll();
@@ -31,7 +31,7 @@ public class MobCommand : AbstractTemplateCommand<IMobTemplate>
 
         return result;
     }
-    
+
     protected override Task Execute(IFieldUser user, IMobTemplate template, TemplateCommandArgs args)
         => Task.CompletedTask;
 }

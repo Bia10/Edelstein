@@ -1,4 +1,4 @@
-using Edelstein.Protocol.Gameplay.Game.Objects.User;
+﻿using Edelstein.Protocol.Gameplay.Game.Objects.User;
 using Edelstein.Protocol.Gameplay.Game.Quests.Templates;
 using Edelstein.Protocol.Utilities.Templates;
 

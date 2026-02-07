@@ -1,4 +1,4 @@
-namespace Edelstein.Plugin.Rue.Configs;
+﻿namespace Edelstein.Plugin.Rue.Configs;
 
 /// <summary>
 /// Configuration for auto-created characters when none exist during auto-login.

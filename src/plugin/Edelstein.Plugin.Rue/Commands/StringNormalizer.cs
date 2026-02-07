@@ -1,4 +1,4 @@
-namespace Edelstein.Plugin.Rue.Commands;
+﻿namespace Edelstein.Plugin.Rue.Commands;
 
 /// <summary>
 /// Utility for normalizing search keys by trimming whitespace,

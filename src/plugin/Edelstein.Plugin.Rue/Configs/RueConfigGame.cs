@@ -1,4 +1,4 @@
-namespace Edelstein.Plugin.Rue.Configs;
+﻿namespace Edelstein.Plugin.Rue.Configs;
 
 /// <summary>
 /// Configuration for Rue game plugin.

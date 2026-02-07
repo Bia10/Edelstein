@@ -1,4 +1,4 @@
-namespace Edelstein.Plugin.Rue.Commands;
+﻿namespace Edelstein.Plugin.Rue.Commands;
 
 /// <summary>
 /// A command that supports pre-indexing for faster search operations.
